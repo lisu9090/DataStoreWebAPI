@@ -11,10 +11,9 @@ namespace Shop.Domain.Models
         public double DiscountPrice { get; set; }
         public string DeliveredIn { get; set; }
         public string ArticleCode { get; set; }
-        public ArticleModel Article { get; set; }
-        public int ColorID { get; set; }
-        public ColorModel Color { get; set; }
-        public int SizeID { get; set; }
-        public SizeModel Size { get; set; }
+        public string Color { get; set; }
+        //public ColorModel Color { get; set; }
+        public int Size { get; set; }
+        //public SizeModel Size { get; set; }
     }
 }

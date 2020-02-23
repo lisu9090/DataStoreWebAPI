@@ -8,5 +8,6 @@ namespace Shop.Domain.Models
     {
         public int ID { get; set; }
         public string Code { get; set; }
+        public virtual ICollection<ColorModel> Colors { get; set; }
     }
 }

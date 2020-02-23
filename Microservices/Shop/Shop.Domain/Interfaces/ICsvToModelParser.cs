@@ -8,9 +8,9 @@ namespace Shop.Domain.Interfaces
 {
     public interface ICsvToModelParser
     {
-        VariantModel Parse(string data);
-        Task<VariantModel> ParseAsync(string data);
-        IEnumerable<VariantModel> ParseBatch(string data);
-        Task<IEnumerable<VariantModel>> ParseBatchAsync(string data);
+        ArticleModel Parse(string data);
+        Task<ArticleModel> ParseAsync(string data);
+        IEnumerable<ArticleModel> ParseBatch(string data);
+        Task<IEnumerable<ArticleModel>> ParseBatchAsync(string data);
     }
 }

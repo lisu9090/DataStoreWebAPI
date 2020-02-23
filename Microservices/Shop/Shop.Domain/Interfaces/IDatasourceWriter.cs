@@ -9,7 +9,7 @@ namespace Shop.Domain.Interfaces
 {
     public interface IDatasourceWriter
     {
-        int SaveModelData(IEnumerable<VariantModel> data);
-        Task<int> SaveModelDataAsync(IEnumerable<VariantModel> data);
+        int SaveModelData(IEnumerable<ArticleModel> data);
+        Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data);
     }
 }

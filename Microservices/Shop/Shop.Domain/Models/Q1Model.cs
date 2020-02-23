@@ -8,5 +8,6 @@ namespace Shop.Domain.Models
     {
         public int ID { get; set; }
         public string Q1 { get; set; }
+        public virtual ICollection<SizeModel> Sizes { get; set; }
     }
 }

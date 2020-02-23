@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shop.Domain.DomainClasses
+namespace Shop.Domain.Services
 {
-    public class DatasourceWriter: IDatasourceWriter
+    public class DatasourceService: IDatasourceWriter
     {
         private IDataRepository _repository;
 
-        public DatasourceWriter(IDataRepository repository)
+        public DatasourceService(IDataRepository repository)
         {
             _repository = repository;
         }
 
-        public int SaveModelData(IEnumerable<VariantModel> data)
+        public int SaveModelData(IEnumerable<ArticleModel> data)
         {
             int counter = 0;
 
@@ -43,7 +43,7 @@ namespace Shop.Domain.DomainClasses
             return counter;
         }
 
-        public Task<int> SaveModelDataAsync(IEnumerable<VariantModel> data)
+        public Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data)
         {
             return new TaskFactory().StartNew(() => {
                 return SaveModelData(data);
