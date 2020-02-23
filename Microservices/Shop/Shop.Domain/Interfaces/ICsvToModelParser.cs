@@ -8,6 +8,7 @@ namespace Shop.Domain.Interfaces
 {
     public interface ICsvToModelParser
     {
+        public void SetKeysPositions(string[] keys);
         ArticleModel Parse(string data);
         Task<ArticleModel> ParseAsync(string data);
         IEnumerable<ArticleModel> ParseBatch(string data);
