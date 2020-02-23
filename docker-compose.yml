@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  shopmanager:
+    image: ${DOCKER_REGISTRY-}shopmanager
+    build:
+      context: .
+      dockerfile: WebFront/ShopManager/Dockerfile
+
+  shop.api:
+    image: ${DOCKER_REGISTRY-}shopapi
+    build:
+      context: .
+      dockerfile: Microservices/Shop/Shop.API/Dockerfile
+
