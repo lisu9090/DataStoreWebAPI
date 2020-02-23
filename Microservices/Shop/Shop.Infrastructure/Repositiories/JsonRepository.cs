@@ -29,17 +29,17 @@ namespace Shop.Infrastructure.Repositiories
             throw new NotImplementedException();
         }
 
-        public Task<bool> SaveChangesAsync()
+        public Task<int> SaveChangesAsync()
         {
             throw new NotImplementedException();
         }
 
-        public int WriteData(ArticleModel data)
+        public void WriteData(ArticleModel data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> WriteDataAsync(ArticleModel data)
+        public Task WriteDataAsync(ArticleModel data)
         {
             throw new NotImplementedException();
         }

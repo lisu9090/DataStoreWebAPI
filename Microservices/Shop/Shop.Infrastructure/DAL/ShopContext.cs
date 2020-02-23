@@ -11,15 +11,8 @@ namespace Shop.Infrastructure.DAL
     {
         public DbSet<ArticleModel> Articles { get; set; }
         public DbSet<VariantModel> Variants { get; set; }
-        //public DbSet<Q1Model> Q1s { get; set; }
-        //public DbSet<SizeModel> Sizes { get; set; }
-        //public DbSet<ColorCodeModel> ColorCodes { get; set; }
-        //public DbSet<ColorModel> Colors { get; set; }
 
-        public ShopContext() : base("ShopContext")
-        {
-
-        }
+        public ShopContext(string connectionString = "ShopContext") : base(connectionString) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

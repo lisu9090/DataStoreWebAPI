@@ -64,7 +64,6 @@ namespace Shop.Domain.Services
                 articleModel.Description = dataArray[KeysPositions["Description"]];
                 articleModel.Q1 = dataArray[KeysPositions["Q1"]];
                 articleModel.ColorCode = dataArray[KeysPositions["ColorCode"]];
-               
             }
 
             return articleModel;

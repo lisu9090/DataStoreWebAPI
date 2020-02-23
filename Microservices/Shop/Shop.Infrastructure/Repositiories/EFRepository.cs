@@ -1,5 +1,6 @@
 ﻿using Shop.Domain.Interfaces;
 using Shop.Domain.Models;
+using Shop.Infrastructure.DAL;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,39 +10,52 @@ namespace Shop.Infrastructure.Repositiories
 {
     public class EFRepository : IDataRepository
     {
+        private ShopContext _dbContext;
+
+        public EFRepository()
+        {
+            _dbContext = new ShopContext();
+        }
+
+        public EFRepository(string connectionString)
+        {
+            _dbContext = new ShopContext(connectionString);
+        }
+
         public void BeginTransaction()
         {
-            throw new NotImplementedException();
+            _dbContext.Database.BeginTransaction();
         }
 
         public void CommitTransaction()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            _dbContext.Database.CurrentTransaction.Commit();
         }
 
         public void RollbackTransaction()
         {
-            throw new NotImplementedException();
+            _dbContext.Database.CurrentTransaction.Rollback();
         }
 
-        public Task<bool> SaveChangesAsync()
+        public Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return new TaskFactory().StartNew(() => _dbContext.SaveChanges());
         }
 
-        public int WriteData(ArticleModel data)
+        public void WriteData(ArticleModel data)
         {
-            throw new NotImplementedException();
+            _dbContext.Articles.Add(data);
         }
 
-        public Task<int> WriteDataAsync(ArticleModel data)
+        public Task WriteDataAsync(ArticleModel data)
         {
-            throw new NotImplementedException();
+            return new TaskFactory().StartNew(() => WriteData(data));
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Database.CurrentTransaction.Dispose();
+            _dbContext.Dispose();
         }
     }
 }

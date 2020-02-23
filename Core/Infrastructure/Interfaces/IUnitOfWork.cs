@@ -10,6 +10,6 @@ namespace Infrastructure.Interfaces
         void BeginTransaction();
         void RollbackTransaction();
         void CommitTransaction();
-        Task<bool> SaveChangesAsync();
+        Task<int> SaveChangesAsync();
     }
 }

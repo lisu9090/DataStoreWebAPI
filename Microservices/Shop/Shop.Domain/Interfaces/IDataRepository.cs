@@ -9,7 +9,7 @@ namespace Shop.Domain.Interfaces
 {
     public interface IDataRepository: IUnitOfWork
     {
-        int WriteData(ArticleModel data);
-        Task<int> WriteDataAsync(ArticleModel data);
+        void WriteData(ArticleModel data);
+        Task WriteDataAsync(ArticleModel data);
     }
 }
