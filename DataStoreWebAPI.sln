@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.API", "Microservices\S
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C06F975C-4BD4-4DCA-8C79-6DB2490B596B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopManager", "WebFront\ShopManager\ShopManager.csproj", "{6EFFD93A-0BB5-4E9E-8421-3E343A1B4310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopManager", "WebFront\ShopManager\ShopManager.csproj", "{6EFFD93A-0BB5-4E9E-8421-3E343A1B4310}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

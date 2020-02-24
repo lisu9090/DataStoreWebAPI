@@ -22,4 +22,10 @@ services:
     build:
       context: .
       dockerfile: Microservices/Shop/Shop.API/Dockerfile
-
+    depends_on:
+        - db
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+        SA_PASSWORD: "testestest123"
+        ACCEPT_EULA: "Y"
