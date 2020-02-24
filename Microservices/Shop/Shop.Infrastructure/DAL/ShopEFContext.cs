@@ -12,6 +12,6 @@ namespace Shop.Infrastructure.DAL
         public DbSet<VariantModel> Variants { get; set; }
 
         public ShopEFContext() : base() { }
-        public ShopEFContext(DbContextOptions options) : base(options) { }
+        public ShopEFContext(DbContextOptions<ShopEFContext> options) : base(options) { }
     }
 }

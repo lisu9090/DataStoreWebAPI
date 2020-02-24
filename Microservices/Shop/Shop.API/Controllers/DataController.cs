@@ -10,6 +10,7 @@ using Microsoft.Net.Http.Headers;
 using Shop.API.Utils;
 using Shop.Domain.Interfaces;
 using Shop.Domain.Services;
+using Shop.Infrastructure.DAL;
 using Shop.Infrastructure.Repositiories;
 
 namespace Shop.API.Controllers
@@ -23,10 +24,10 @@ namespace Shop.API.Controllers
         private IDatasourceWriter _jsonWriter;
         private readonly int _limit = 1024 * 1024;
 
-        public DataController()
+        public DataController(ShopEFContext dbContext)
         {
             _parser = new ModelParserService();
-            _efWriter = new DatasourceService(new EFRepository());
+            _efWriter = new DatasourceService(new EFRepository(dbContext));
             _jsonWriter = new DatasourceService(new JsonRepository());
         }
 

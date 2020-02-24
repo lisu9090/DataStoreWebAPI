@@ -18,9 +18,14 @@ namespace Shop.Infrastructure.Repositiories
             _dbContext = new ShopEFContext();
         }
 
-        public EFRepository(DbContextOptions options)
+        public EFRepository(DbContextOptions<ShopEFContext> options)
         {
             _dbContext = new ShopEFContext(options);
+        }
+
+        public EFRepository(ShopEFContext context)
+        {
+            _dbContext = context;
         }
 
         public void BeginTransaction()
