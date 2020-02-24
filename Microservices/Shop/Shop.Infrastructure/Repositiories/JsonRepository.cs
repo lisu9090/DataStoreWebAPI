@@ -1,5 +1,6 @@
 ﻿using Shop.Domain.Interfaces;
 using Shop.Domain.Models;
+using Shop.Infrastructure.DAL;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,39 +10,44 @@ namespace Shop.Infrastructure.Repositiories
 {
     public class JsonRepository : IDataRepository
     {
+        ShopJsonContext _jsonContext;
+
+        public JsonRepository()
+        {
+            _jsonContext = new ShopJsonContext();
+        }
+        public JsonRepository(string path)
+        {
+            _jsonContext = new ShopJsonContext(path);
+        }
         public void BeginTransaction()
         {
-            throw new NotImplementedException();
+            _jsonContext.BeginTransaction();
         }
 
         public void CommitTransaction()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            _jsonContext.CommitTransaction();
         }
 
         public void RollbackTransaction()
         {
-            throw new NotImplementedException();
+            _jsonContext.RollbackTransaction();
         }
 
         public Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return _jsonContext.SaveChangesAsync();
         }
 
         public void WriteData(ArticleModel data)
         {
-            throw new NotImplementedException();
+            _jsonContext.Models.Add(data);
         }
 
         public Task WriteDataAsync(ArticleModel data)
         {
-            throw new NotImplementedException();
+            return new TaskFactory().StartNew(() => WriteData(data));
         }
     }
 }

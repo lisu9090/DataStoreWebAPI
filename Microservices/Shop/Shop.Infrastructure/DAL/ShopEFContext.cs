@@ -7,12 +7,12 @@ using System.Text;
 
 namespace Shop.Infrastructure.DAL
 {
-    class ShopContext: DbContext
+    class ShopEFContext: DbContext
     {
         public DbSet<ArticleModel> Articles { get; set; }
         public DbSet<VariantModel> Variants { get; set; }
 
-        public ShopContext(string connectionString = "ShopContext") : base(connectionString) { }
+        public ShopEFContext(string connectionString = "ShopContext") : base(connectionString) { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

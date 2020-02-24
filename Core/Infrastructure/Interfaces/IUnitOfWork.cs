@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Interfaces
 {
-    public interface IUnitOfWork: IDisposable
+    public interface IUnitOfWork
     {
         void BeginTransaction();
         void RollbackTransaction();

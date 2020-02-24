@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace Shop.Infrastructure.Repositiories
 {
-    public class EFRepository : IDataRepository
+    public class EFRepository : IDataRepository, IDisposable
     {
-        private ShopContext _dbContext;
+        private ShopEFContext _dbContext;
 
         public EFRepository()
         {
-            _dbContext = new ShopContext();
+            _dbContext = new ShopEFContext();
         }
 
         public EFRepository(string connectionString)
         {
-            _dbContext = new ShopContext(connectionString);
+            _dbContext = new ShopEFContext(connectionString);
         }
 
         public void BeginTransaction()
