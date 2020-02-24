@@ -1,4 +1,5 @@
-﻿using Shop.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Domain.Interfaces;
 using Shop.Domain.Models;
 using Shop.Infrastructure.DAL;
 using System;
@@ -17,9 +18,9 @@ namespace Shop.Infrastructure.Repositiories
             _dbContext = new ShopEFContext();
         }
 
-        public EFRepository(string connectionString)
+        public EFRepository(DbContextOptions options)
         {
-            _dbContext = new ShopEFContext(connectionString);
+            _dbContext = new ShopEFContext(options);
         }
 
         public void BeginTransaction()

@@ -44,6 +44,7 @@ namespace Shop.API.Controllers
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
 
             string[] keys = null;
+            int efCounter = 0, jsonCounter = 0;
             var section = await reader.ReadNextSectionAsync();
 
             while (section != null)
@@ -74,14 +75,14 @@ namespace Shop.API.Controllers
                     }
 
                     var data = _parser.ParseBatch(value);
-                    _efWriter.SaveModelDataAsync(data);
-                    _jsonWriter.SaveModelDataAsync(data);
+                    efCounter += await _efWriter.SaveModelDataAsync(data);
+                    jsonCounter += await _jsonWriter.SaveModelDataAsync(data);
                 }
 
                 section = await reader.ReadNextSectionAsync();
             }
             
-            return Ok("Done!");
+            return Ok(string.Format("Done! Rows inserted EF = {0}, JSON = {1}", efCounter, jsonCounter));
         }
     }
 }
