@@ -52,7 +52,7 @@ namespace Shop.API.Controllers
             {
                 using (var streamReader = new StreamReader(section.Body, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
                 {
-                    var value = await streamReader.ReadToEndAsync();
+                    var value = (await streamReader.ReadToEndAsync()).Replace("\r", "");
 
                     if (string.IsNullOrEmpty(value) || string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
                     { 
@@ -66,6 +66,7 @@ namespace Shop.API.Controllers
                         {
                             keys = value.Split('\n')[0].Split(',');
                             _parser.SetKeysPositions(keys);
+                            value = value.Substring(value.IndexOf('\n') + 1);
                         }
                         catch (Exception e)
                         {
@@ -76,7 +77,7 @@ namespace Shop.API.Controllers
                     }
 
                     var data = _parser.ParseBatch(value);
-                    efCounter += await _efWriter.SaveModelDataAsync(data);
+                    //efCounter += await _efWriter.SaveModelDataAsync(data);
                     jsonCounter += await _jsonWriter.SaveModelDataAsync(data);
                 }
 

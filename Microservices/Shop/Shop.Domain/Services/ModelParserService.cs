@@ -33,9 +33,12 @@ namespace Shop.Domain.Services
         {
             var articleModel = new ArticleModel();
             var variantModel = new VariantModel();
-            var dataArray = data.Split(',');
-
             articleModel.Variants = new List<VariantModel>() { variantModel };
+
+            if (string.IsNullOrEmpty(data))
+                return articleModel;
+
+            var dataArray = data.Split(',');
 
             if (KeysPositions != null && KeysPositions.Count > 0)
             {
