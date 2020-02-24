@@ -16,12 +16,12 @@ namespace Shop.Infrastructure.DAL
 
         public List<ArticleModel> Models { get; set; }
 
-        public ShopJsonContext(string path = @"C:\Shop\Shop.json")
+        public ShopJsonContext(string path = @"/home/shop/Shop.json")
         {
             _path = path;
             if (!File.Exists(path))
             {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\') + 1));
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/') + 1));
                 File.Create(path);
             }
 

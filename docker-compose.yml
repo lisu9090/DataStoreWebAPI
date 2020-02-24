@@ -3,12 +3,22 @@ version: '3.4'
 services:
   shopmanager:
     image: ${DOCKER_REGISTRY-}shopmanager
+    hostname: shopmanager
+    container_name: shopmanager
+    restart: always
+    ports:
+    - '8090:80'
     build:
       context: .
       dockerfile: WebFront/ShopManager/Dockerfile
 
   shop.api:
     image: ${DOCKER_REGISTRY-}shopapi
+    hostname: shopapi
+    container_name: shopapi
+    restart: always
+    ports:
+    - '8095:80'
     build:
       context: .
       dockerfile: Microservices/Shop/Shop.API/Dockerfile

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
+using Shop.API.Utils;
 using Shop.Domain.Interfaces;
 using Shop.Domain.Services;
 using Shop.Infrastructure.Repositiories;
@@ -17,6 +21,8 @@ namespace Shop.API.Controllers
         private ICsvToModelParser _parser;
         private IDatasourceWriter _efWriter;
         private IDatasourceWriter _jsonWriter;
+        private readonly int _limit = 1024 * 1024;
+
         public DataController()
         {
             _parser = new ModelParserService();
@@ -25,30 +31,57 @@ namespace Shop.API.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task UploadShopData(IAsyncEnumerable<string> stream)
+        public async Task<IActionResult> UploadShopData()
         {
-            string[] keys = null;
-
-            await foreach(var item in stream)
+            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
-                if (keys == null)
+                ModelState.AddModelError("File", $"The request couldn't be processed.");
+
+                return BadRequest(ModelState);
+            }
+
+            var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), _limit);
+            var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+
+            string[] keys = null;
+            var section = await reader.ReadNextSectionAsync();
+
+            while (section != null)
+            {
+                using (var streamReader = new StreamReader(section.Body, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
                 {
-                    try
-                    {
-                        keys = item.Split('\n')[0].Split(',');
-                        _parser.SetKeysPositions(keys);
+                    var value = await streamReader.ReadToEndAsync();
+
+                    if (string.IsNullOrEmpty(value) || string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
+                    { 
+                        section = await reader.ReadNextSectionAsync();
+                        continue;
                     }
-                    catch(Exception e)
+
+                    if (keys == null)
                     {
-                        Console.WriteLine(e);
+                        try
+                        {
+                            keys = value.Split('\n')[0].Split(',');
+                            _parser.SetKeysPositions(keys);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            section = await reader.ReadNextSectionAsync();
+                            continue;
+                        }
                     }
+
+                    var data = _parser.ParseBatch(value);
+                    _efWriter.SaveModelDataAsync(data);
+                    _jsonWriter.SaveModelDataAsync(data);
                 }
 
-                var data = _parser.ParseBatch(item);
-                _efWriter.SaveModelDataAsync(data);
-                _jsonWriter.SaveModelDataAsync(data);
+                section = await reader.ReadNextSectionAsync();
             }
+            
+            return Ok("Done!");
         }
-
     }
 }

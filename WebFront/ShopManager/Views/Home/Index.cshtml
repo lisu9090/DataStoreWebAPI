@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Shop Manager</h1>
+    
+    <form action="http://localhost:8095/api/data/upload" enctype="multipart/form-data" method="post" style="margin-top:3rem;">
+        <p>Upload .csv file</p>
+        <input name="data" type="file" accept=".csv"/>
+        <br />
+        <button style="margin-top:1rem" type="submit">Submint</button>
+    </form>
+    
+</div>
