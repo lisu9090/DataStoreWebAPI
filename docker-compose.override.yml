@@ -23,3 +23,8 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  db:
+    environment:
+      SA_PASSWORD: "testestest123"
+      ACCEPT_EULA: "Y"

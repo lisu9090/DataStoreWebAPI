@@ -13,6 +13,7 @@ namespace Shop.Infrastructure.DAL
     {
         private string _path;
         private List<ArticleModel> _models;
+        private static object _lock = new object();
 
         public List<ArticleModel> Models { get; set; }
 
@@ -52,10 +53,13 @@ namespace Shop.Infrastructure.DAL
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.NullValueHandling = NullValueHandling.Ignore;
 
-                using (StreamWriter sw = new StreamWriter(_path))
-                using (JsonWriter writer = new JsonTextWriter(sw))
+                lock (_lock)
                 {
-                    serializer.Serialize(writer, MergeModels());
+                    using (StreamWriter sw = new StreamWriter(_path))
+                    using (JsonWriter writer = new JsonTextWriter(sw))
+                    {
+                        serializer.Serialize(writer, MergeModels());
+                    }
                 }
 
                 var count = _models.Count;

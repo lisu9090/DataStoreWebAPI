@@ -77,7 +77,7 @@ namespace Shop.API.Controllers
                     }
 
                     var data = _parser.ParseBatch(value);
-                    //efCounter += await _efWriter.SaveModelDataAsync(data);
+                    efCounter += await _efWriter.SaveModelDataAsync(data);
                     jsonCounter += await _jsonWriter.SaveModelDataAsync(data);
                 }
 
