@@ -15,11 +15,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopManager", "WebFront\ShopManager\ShopManager.csproj", "{6EFFD93A-0BB5-4E9E-8421-3E343A1B4310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Domain.Tests", "Test\Shop\Shop.Domain.Tests\Shop.Domain.Tests.csproj", "{1699DDCA-AA73-4039-BB8C-689042287BE8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Infrastructure.Tests", "Test\Shop\Shop.Infrastructure.Tests\Shop.Infrastructure.Tests.csproj", "{DD4FBEE8-A47B-43C2-8F11-7437DB855B9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.API.Tests", "Test\Shop\Shop.API.Tests\Shop.API.Tests.csproj", "{7341AA76-80F0-4048-8A3D-B51CC9484FE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Tests", "Test\Shop\Shop.Domain.Tests\Shop.Tests.csproj", "{1699DDCA-AA73-4039-BB8C-689042287BE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,14 +51,6 @@ Global
 		{1699DDCA-AA73-4039-BB8C-689042287BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1699DDCA-AA73-4039-BB8C-689042287BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1699DDCA-AA73-4039-BB8C-689042287BE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD4FBEE8-A47B-43C2-8F11-7437DB855B9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD4FBEE8-A47B-43C2-8F11-7437DB855B9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD4FBEE8-A47B-43C2-8F11-7437DB855B9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD4FBEE8-A47B-43C2-8F11-7437DB855B9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7341AA76-80F0-4048-8A3D-B51CC9484FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7341AA76-80F0-4048-8A3D-B51CC9484FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7341AA76-80F0-4048-8A3D-B51CC9484FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7341AA76-80F0-4048-8A3D-B51CC9484FE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

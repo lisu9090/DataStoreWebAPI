@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Shop.Domain.Tests
+namespace Shop.Tests
 {
     public class DatasourceServiceTests
     {
