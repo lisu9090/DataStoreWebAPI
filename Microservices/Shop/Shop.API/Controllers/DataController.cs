@@ -85,8 +85,10 @@ namespace Shop.API.Controllers
                     }
 
                     var data = _parser != null ? _parser.ParseBatch(value) : new List<ArticleModel>();
-                    efCounter += await _efWriter?.SaveModelDataAsync(data);
-                    jsonCounter += await _jsonWriter?.SaveModelDataAsync(data);
+                    if(_efWriter != null)
+                        efCounter += await _efWriter.SaveModelDataAsync(data);
+                    if(_jsonWriter != null)
+                        jsonCounter += await _jsonWriter?.SaveModelDataAsync(data);
                 }
 
                 section = await reader.ReadNextSectionAsync();
