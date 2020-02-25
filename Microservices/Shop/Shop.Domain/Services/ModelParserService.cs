@@ -19,7 +19,7 @@ namespace Shop.Domain.Services
             SetKeysPositions(keys);
         }
 
-        public void SetKeysPositions(string[] keys)
+        public void SetKeysPositions(string[] keys) // create dictionary with columns names and their order indexes
         {
             KeysPositions = new Dictionary<string, int>();
 
@@ -31,22 +31,23 @@ namespace Shop.Domain.Services
 
         public ArticleModel Parse(string data)
         {
-            var articleModel = new ArticleModel();
+            var articleModel = new ArticleModel(); //create empty model
             var variantModel = new VariantModel();
-            articleModel.Variants = new List<VariantModel>() { variantModel };
+            articleModel.Variants = new List<VariantModel>() { variantModel }; 
 
-            if (string.IsNullOrEmpty(data))
-                return articleModel;
+            if (string.IsNullOrEmpty(data)) //if data is empty return empty model
+                return articleModel; 
 
             var dataArray = data.Split(',');
 
-            if (KeysPositions != null && KeysPositions.Count > 0)
+            if (KeysPositions != null && KeysPositions.Count > 0) //if keys are no set return empty model
             {
+                //parse data to proper type and fill model
                 int tmpInt;
-                double tmpDouble;
+                double tmpDouble; 
 
                 //Varaint
-                variantModel.Key = dataArray[KeysPositions["Key"]];
+                variantModel.Key = dataArray[KeysPositions["Key"]]; 
                 variantModel.ArticleCode = dataArray[KeysPositions["ArtikelCode"]];
                 variantModel.Color = dataArray[KeysPositions["Color"]];
                 variantModel.DeliveredIn = dataArray[KeysPositions["DeliveredIn"]];
@@ -82,7 +83,7 @@ namespace Shop.Domain.Services
 
         public IEnumerable<ArticleModel> ParseBatch(string data)
         {
-            return MergeModels(from item in data.Split('\n') select Parse(item));
+            return MergeModels(from item in data.Split('\n') select Parse(item)); //parse batch of data and return model collection
         }
 
         public Task<IEnumerable<ArticleModel>> ParseBatchAsync(string data)
@@ -92,7 +93,7 @@ namespace Shop.Domain.Services
             });
         }
 
-        private List<ArticleModel> MergeModels(IEnumerable<ArticleModel> models)
+        private List<ArticleModel> MergeModels(IEnumerable<ArticleModel> models) //conver data from (1 article : 1 variant) to (1 article : many variants) models
         {
             var list = new List<ArticleModel>();
             ArticleModel tmp;
@@ -102,7 +103,7 @@ namespace Shop.Domain.Services
                 if (string.IsNullOrEmpty(item.ArticleCode))
                     continue;
 
-                tmp = list.Find(listItem => listItem.ArticleCode == item.ArticleCode);
+                tmp = list.Find(listItem => listItem.ArticleCode == item.ArticleCode); //Use ArticleCode to fill aticle's variants collecion
                 if (tmp != null)
                 {
                     foreach (var variant in item.Variants)

@@ -44,24 +44,35 @@ namespace Shop.API.Controllers
 
             var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), _limit);
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+            var section = await reader.ReadNextSectionAsync(); //get data part
 
-            string[] keys = null;
-            int efCounter = 0, jsonCounter = 0;
-            var section = await reader.ReadNextSectionAsync();
+            string[] keys = null; //columns names
+            int efCounter = 0, jsonCounter = 0; //Data rows counters
+            var tailingData = ""; //used when received data doesn't end with \n
 
             while (section != null)
             {
                 using (var streamReader = new StreamReader(section.Body, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
                 {
-                    var value = (await streamReader.ReadToEndAsync()).Replace("\r", "");
+                    var value = tailingData + (await streamReader.ReadToEndAsync()).Replace("\r", ""); //read data from body; remove '\r', merge with tailing data
 
-                    if (string.IsNullOrEmpty(value) || string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
-                    { 
+
+                    if (string.IsNullOrEmpty(value) || string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase)) //if vaule is empty continue
+                    {
                         section = await reader.ReadNextSectionAsync();
                         continue;
                     }
 
-                    if (keys == null)
+                    var incLastIdx = value.LastIndexOf('\n') + 1; //incremented last index of
+                    if (incLastIdx < value.Length)
+                    {
+                        tailingData = value.Substring(incLastIdx);
+                        value = value.Substring(0, value.Length - incLastIdx);
+                    }
+                    else
+                        tailingData = "";
+
+                    if (keys == null) //if columns names haven't been set yet, do it and remove first themfrom value
                     {
                         try
                         {
@@ -77,17 +88,17 @@ namespace Shop.API.Controllers
                         }
                     }
 
-                    var data = _parser != null ? _parser.ParseBatch(value) : new List<ArticleModel>();
-                    if(_efWriter != null)
-                        efCounter += await _efWriter.SaveModelDataAsync(data);
-                    if(_jsonWriter != null)
-                        jsonCounter += await _jsonWriter?.SaveModelDataAsync(data);
+                    var data = _parser != null ? _parser.ParseBatch(value) : new List<ArticleModel>(); //use ICsvToModelParser object to convert string data to  models 
+                    if (_efWriter != null)
+                        efCounter += await _efWriter.SaveModelDataAsync(data); //use IDatasourceWriter object to write data to sqlserver
+                    if (_jsonWriter != null)
+                        jsonCounter += await _jsonWriter?.SaveModelDataAsync(data); //use IDatasourceWriter object to write data to json file
                 }
 
-                section = await reader.ReadNextSectionAsync();
+                section = await reader.ReadNextSectionAsync(); //read next section
             }
-            
-            return Ok(string.Format("Done! Rows inserted EF = {0}, JSON = {1}", efCounter, jsonCounter));
+
+            return Ok(string.Format("Done! Rows inserted EF = {0}, JSON = {1}", efCounter, jsonCounter)); //return results
         }
     }
 }

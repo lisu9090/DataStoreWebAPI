@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Interfaces
 {
-    public interface IDatasourceWriter
+    public interface IDatasourceWriter //to be implemented inside domain
     {
         int SaveModelData(IEnumerable<ArticleModel> data);
         Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data);

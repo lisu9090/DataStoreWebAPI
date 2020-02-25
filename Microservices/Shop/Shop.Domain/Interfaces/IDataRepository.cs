@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Interfaces
 {
-    public interface IDataRepository: IUnitOfWork
+    public interface IDataRepository: IUnitOfWork // to be implemented outside domain (infrastructure)
     {
         void WriteData(ArticleModel data);
         Task WriteDataAsync(ArticleModel data);

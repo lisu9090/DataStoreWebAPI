@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Shop.Infrastructure.DAL
 {
-    public class ShopEFContext: DbContext
+    public class ShopEFContext: DbContext //class acts as db interface
     {
         public DbSet<ArticleModel> Articles { get; set; }
-        //public DbSet<VariantModel> Variants { get; set; }
+        public DbSet<VariantModel> Variants { get; set; }
 
         public ShopEFContext() : base() { }
         public ShopEFContext(DbContextOptions<ShopEFContext> options) : base(options) { }

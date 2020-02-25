@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Infrastructure.DAL
 {
-    class ShopJsonContext: IUnitOfWork
+    class ShopJsonContext: IUnitOfWork //class acts as interface to write data to json file
     {
         private string _path;
         private List<ArticleModel> _models;
@@ -54,10 +54,17 @@ namespace Shop.Infrastructure.DAL
 
                 lock (_lock)
                 {
-                    using (StreamWriter sw = new StreamWriter(_path))
-                    using (JsonWriter writer = new JsonTextWriter(sw))
+                    try
                     {
-                        serializer.Serialize(writer, _models);
+                        using (StreamWriter sw = new StreamWriter(_path))
+                        using (JsonWriter writer = new JsonTextWriter(sw))
+                        {
+                            serializer.Serialize(writer, _models);
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e);
                     }
                 }
 

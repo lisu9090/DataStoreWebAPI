@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Interfaces
 {
-    public interface ICsvToModelParser
+    public interface ICsvToModelParser //to be implemented inside domain
     {
         public void SetKeysPositions(string[] keys);
         ArticleModel Parse(string data);
