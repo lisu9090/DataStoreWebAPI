@@ -33,21 +33,5 @@ namespace Shop.API.Utils
             return !string.IsNullOrEmpty(contentType)
                    && contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
         }
-
-        //public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
-        //{
-        //    return contentDisposition != null
-        //        && contentDisposition.DispositionType.Equals("form-data")
-        //        && string.IsNullOrEmpty(contentDisposition.FileName.Value)
-        //        && string.IsNullOrEmpty(contentDisposition.FileNameStar.Value);
-        //}
-
-        //public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
-        //{
-        //    return contentDisposition != null
-        //        && contentDisposition.DispositionType.Equals("form-data")
-        //        && (!string.IsNullOrEmpty(contentDisposition.FileName.Value)
-        //            || !string.IsNullOrEmpty(contentDisposition.FileNameStar.Value));
-        //}
     }
 }

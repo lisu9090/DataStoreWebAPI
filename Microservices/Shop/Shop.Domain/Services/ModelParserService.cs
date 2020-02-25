@@ -47,6 +47,7 @@ namespace Shop.Domain.Services
 
                 //Varaint
                 variantModel.Key = dataArray[KeysPositions["Key"]];
+                variantModel.ArticleCode = dataArray[KeysPositions["ArtikelCode"]];
                 variantModel.Color = dataArray[KeysPositions["Color"]];
                 variantModel.DeliveredIn = dataArray[KeysPositions["DeliveredIn"]];
                 if (int.TryParse(dataArray[KeysPositions["Size"]], out tmpInt))
