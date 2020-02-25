@@ -45,7 +45,21 @@ namespace Shop.Infrastructure.Repositiories
 
         public Task<int> SaveChangesAsync()
         {
-            return new TaskFactory().StartNew(() => _dbContext.SaveChanges());
+
+            return new TaskFactory().StartNew(() =>
+            {
+                try
+                {
+                    return _dbContext.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return -1;
+                }
+
+            });
+
         }
 
         public void WriteData(ArticleModel data)
