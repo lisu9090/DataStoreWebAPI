@@ -3,7 +3,7 @@ version: '3.4'
 services:
   db:
     environment:
-      SA_PASSWORD: "testestest123"
+      SA_PASSWORD: "TESTestest123#"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"

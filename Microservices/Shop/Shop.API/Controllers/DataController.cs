@@ -23,7 +23,7 @@ namespace Shop.API.Controllers
         private ICsvToModelParser _parser;
         private IDatasourceWriter _efWriter;
         private IDatasourceWriter _jsonWriter;
-        private readonly int _limit = 1024 * 1024;
+        private readonly int _limit = 64;
 
         public DataController(ShopEFContext dbContext)
         {
