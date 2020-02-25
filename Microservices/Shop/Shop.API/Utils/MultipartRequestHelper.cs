@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop.API.Utils
 {
-    public static class MultipartRequestHelper
+    public static class MultipartRequestHelper //This class helps receive stream
     {
         // Content-Type: multipart/form-data; boundary="----WebKitFormBoundarymx2fSWqWSd0OxQqq"
         public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)

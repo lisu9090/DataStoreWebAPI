@@ -44,16 +44,32 @@ namespace Shop.API.Controllers
 
             var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), _limit);
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-
-            string[] keys = null;
-            int efCounter = 0, jsonCounter = 0;
             var section = await reader.ReadNextSectionAsync();
+
+            string[] keys = null; //columns names
+            int efCounter = 0, jsonCounter = 0; //Data rows counters
+            var tailingData = ""; //used when received data doesn't end with \n
 
             while (section != null)
             {
                 using (var streamReader = new StreamReader(section.Body, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
                 {
                     var value = (await streamReader.ReadToEndAsync()).Replace("\r", "");
+
+                    if (string.IsNullOrEmpty(tailingData))
+                    {
+                        var incLastIdx = value.LastIndexOf('\n') + 1; //incremented last index of
+                        if (incLastIdx < value.Length)
+                        {
+                            tailingData = value.Substring(incLastIdx);
+                            value = value.Substring(0, value.Length - incLastIdx);
+                        }
+                    }
+                    else
+                    {
+                        value = tailingData + value;
+                        tailingData = "";
+                    }
 
                     if (string.IsNullOrEmpty(value) || string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
                     { 

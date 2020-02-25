@@ -1,6 +1,12 @@
 version: '3.4'
 
 services:
+  db:
+    image: "mcr.microsoft.com/mssql/server:2017-latest"
+    hostname: sqlserver
+    container_name: sqlserver
+    restart: always
+
   shopmanager:
     image: ${DOCKER_REGISTRY-}shopmanager
     hostname: shopmanager
@@ -20,9 +26,3 @@ services:
       dockerfile: Microservices/Shop/Shop.API/Dockerfile
     depends_on:
         - db
-  db:
-    image: "mcr.microsoft.com/mssql/server:2017-latest"
-    hostname: sqlserver
-    container_name: sqlserver
-    restart: always
-    
