@@ -14,7 +14,6 @@ namespace Shop.Infrastructure.DAL
         private string _path;
         private List<ArticleModel> _models;
         private static object _lock = new object();
-
         public List<ArticleModel> Models { get; set; }
 
         public ShopJsonContext(string path = @"/home/shop/Shop.json")
@@ -58,7 +57,7 @@ namespace Shop.Infrastructure.DAL
                     using (StreamWriter sw = new StreamWriter(_path))
                     using (JsonWriter writer = new JsonTextWriter(sw))
                     {
-                        serializer.Serialize(writer, MergeModels());
+                        serializer.Serialize(writer, _models);
                     }
                 }
 
@@ -74,30 +73,6 @@ namespace Shop.Infrastructure.DAL
         {
             _models = new List<ArticleModel>();
             Models = new List<ArticleModel>();
-        }
-
-        private List<ArticleModel> MergeModels()
-        {
-            var list = new List<ArticleModel>();
-            ArticleModel tmp;
-
-            foreach(var item in _models)
-            {
-                tmp = list.Find(listItem => listItem.ArticleCode == item.ArticleCode);
-                if (tmp != null)
-                {
-                    foreach(var variant in item.Variants)
-                    {
-                        tmp.Variants.Add(variant);
-                    }
-                }
-                else
-                {
-                    list.Add(item);
-                }
-            }
-
-            return list;
         }
     }
 }

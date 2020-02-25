@@ -18,8 +18,11 @@ namespace Shop.Domain.Services
 
         public int SaveModelData(IEnumerable<ArticleModel> data)
         {
-            int counter = 0;
+            return SaveModelDataAsync(data).Result;
+        }
 
+        public async Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data)
+        {
             _repository.BeginTransaction();
 
             try
@@ -27,27 +30,17 @@ namespace Shop.Domain.Services
                 foreach (var item in data)
                 {
                     _repository.WriteData(item);
-                    counter++;
                 }
 
                 _repository.CommitTransaction();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _repository.RollbackTransaction();
                 Console.WriteLine(e);
             }
 
-            _repository.SaveChangesAsync();
-
-            return counter;
-        }
-
-        public Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data)
-        {
-            return new TaskFactory().StartNew(() => {
-                return SaveModelData(data);
-            });
+            return await _repository.SaveChangesAsync();
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Shop.Domain.Services
 
         public IEnumerable<ArticleModel> ParseBatch(string data)
         {
-            return from item in data.Split('\n') select Parse(item);
+            return MergeModels(from item in data.Split('\n') select Parse(item));
         }
 
         public Task<IEnumerable<ArticleModel>> ParseBatchAsync(string data)
@@ -89,6 +89,33 @@ namespace Shop.Domain.Services
             return new TaskFactory().StartNew(()=> {
                 return ParseBatch(data);
             });
+        }
+
+        private List<ArticleModel> MergeModels(IEnumerable<ArticleModel> models)
+        {
+            var list = new List<ArticleModel>();
+            ArticleModel tmp;
+
+            foreach (var item in models)
+            {
+                if (string.IsNullOrEmpty(item.ArticleCode))
+                    continue;
+
+                tmp = list.Find(listItem => listItem.ArticleCode == item.ArticleCode);
+                if (tmp != null)
+                {
+                    foreach (var variant in item.Variants)
+                    {
+                        tmp.Variants.Add(variant);
+                    }
+                }
+                else
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
         }
     }
 }
