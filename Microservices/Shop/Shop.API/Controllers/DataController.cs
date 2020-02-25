@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using Shop.API.Utils;
 using Shop.Domain.Interfaces;
+using Shop.Domain.Models;
 using Shop.Domain.Services;
 using Shop.Infrastructure.DAL;
 using Shop.Infrastructure.Repositiories;
@@ -29,6 +30,13 @@ namespace Shop.API.Controllers
             _parser = new ModelParserService();
             _efWriter = new DatasourceService(new EFRepository(dbContext));
             _jsonWriter = new DatasourceService(new JsonRepository());
+        }
+
+        public DataController(ICsvToModelParser parser, IDatasourceWriter efWriter, IDatasourceWriter jsonWriter)
+        {
+            _parser = parser;
+            _efWriter = efWriter;
+            _jsonWriter = jsonWriter;
         }
 
         [HttpPost("upload")]
@@ -76,9 +84,9 @@ namespace Shop.API.Controllers
                         }
                     }
 
-                    var data = _parser.ParseBatch(value);
-                    efCounter += await _efWriter.SaveModelDataAsync(data);
-                    jsonCounter += await _jsonWriter.SaveModelDataAsync(data);
+                    var data = _parser != null ? _parser.ParseBatch(value) : new List<ArticleModel>();
+                    efCounter += await _efWriter?.SaveModelDataAsync(data);
+                    jsonCounter += await _jsonWriter?.SaveModelDataAsync(data);
                 }
 
                 section = await reader.ReadNextSectionAsync();
