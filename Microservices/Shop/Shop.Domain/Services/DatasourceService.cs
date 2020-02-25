@@ -18,12 +18,12 @@ namespace Shop.Domain.Services
 
         public int SaveModelData(IEnumerable<ArticleModel> data)
         {
-            return SaveModelDataAsync(data).Result;
+            return SaveModelDataAsync(data).Result; //Save data synchronously
         }
 
         public async Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data)
         {
-            _repository.BeginTransaction();
+            _repository.BeginTransaction(); //create transaction
 
             try
             {
@@ -32,15 +32,15 @@ namespace Shop.Domain.Services
                     _repository.WriteData(item);
                 }
 
-                _repository.CommitTransaction();
+                _repository.CommitTransaction(); //commit transaction after whole data is written
             }
             catch (Exception e)
             {
-                _repository.RollbackTransaction();
+                _repository.RollbackTransaction(); //in case of exception rollback transaction
                 Console.WriteLine(e);
             }
 
-            return await _repository.SaveChangesAsync();
+            return await _repository.SaveChangesAsync(); //finalize transaction
         }
     }
 }

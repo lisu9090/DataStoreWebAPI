@@ -45,7 +45,6 @@ namespace Shop.Infrastructure.Repositiories
 
         public Task<int> SaveChangesAsync()
         {
-
             return new TaskFactory().StartNew(() =>
             {
                 try
@@ -57,14 +56,19 @@ namespace Shop.Infrastructure.Repositiories
                     Console.WriteLine(e);
                     return -1;
                 }
-
             });
-
         }
 
         public void WriteData(ArticleModel data)
         {
-            _dbContext.Articles.Add(data);
+            if(_dbContext.Articles.Find(data.ArticleCode) != null)
+            {
+                _dbContext.Variants.AddRange(data.Variants);
+            }
+            else
+            {
+                _dbContext.Articles.Add(data);
+            }
         }
 
         public Task WriteDataAsync(ArticleModel data)
