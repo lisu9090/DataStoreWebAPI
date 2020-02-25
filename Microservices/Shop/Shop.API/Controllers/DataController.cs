@@ -32,13 +32,6 @@ namespace Shop.API.Controllers
             _jsonWriter = new DatasourceService(new JsonRepository());
         }
 
-        public DataController(ICsvToModelParser parser, IDatasourceWriter efWriter, IDatasourceWriter jsonWriter)
-        {
-            _parser = parser;
-            _efWriter = efWriter;
-            _jsonWriter = jsonWriter;
-        }
-
         [HttpPost("upload")]
         public async Task<IActionResult> UploadShopData()
         {

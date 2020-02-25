@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Shop.Domain.Tests
+namespace Shop.Tests
 {
     public class ModelParserServiceTests
     {
