@@ -15,3 +15,11 @@ Project delivers web API to upload .csv file, convert it into logical model and 
 - First row contains columns names
 - Columns names: Key, ArtikelCode, ColorCode, Description, Price, DiscountPrice, DeliveredIn, Q1, Size, Color
 - File should ends with new line character "\n"
+### Display stored data
+- Json file content can be obtained by running command  
+```
+docker exec -it shopapi cat /home/shop/Shop.json
+```
+- You can connect to and explore MS SQL database using Visual Studio -> Server=localhost;Database=master;User=sa;Password=TESTestest123#;
+
+Please note that containers must be running.
