@@ -9,5 +9,6 @@ namespace Shop.Domain.Abstraction.Services
     public interface IDataService
     {
         Task<string> ProcessDataStreamAsync(StreamReader streamReader);
+        void Reset();
     }
 }

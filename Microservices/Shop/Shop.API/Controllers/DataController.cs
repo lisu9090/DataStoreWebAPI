@@ -21,9 +21,6 @@ namespace Shop.API.Controllers
     [ApiController]
     public class DataController : ControllerBase
     {
-        //private ICsvToModelParser _parser;
-        //private IDatasourceWriter _efWriter;
-        //private IDatasourceWriter _jsonWriter;
         private IDataService _service;
         private readonly int _limit = 128;
 
@@ -38,21 +35,21 @@ namespace Shop.API.Controllers
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
                 ModelState.AddModelError("File", $"The request couldn't be processed.");
-
                 return BadRequest(ModelState);
             }
 
             var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType), _limit);
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
             var section = await reader.ReadNextSectionAsync(); //get data part
-            var output = "";
-
+            var output = "Receiving...\n";
 
             while (section != null)
             {
                 output += await _service.ProcessDataStreamAsync(new StreamReader(section.Body, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true));
                 section = await reader.ReadNextSectionAsync(); //read next section
             }
+
+            _service.Reset();
 
             return Ok(output); //return results
         }

@@ -13,7 +13,7 @@ namespace Shop.Tests
         public void SetKeysPositions_GetsValidInput_AssingsPropperIndexes()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             var inputData = new string[] {"key1", "key2" };
             var expectedData = new Dictionary<string, int>();
             expectedData.Add("key1", 0);
@@ -32,7 +32,7 @@ namespace Shop.Tests
         public void Parse_GetsValidString_RetunsValidModel()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "1,2,1,1,1,1,1,1,1,1";
             var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1"};
@@ -62,7 +62,7 @@ namespace Shop.Tests
         public void Parse_GetsEmptyString_RetunsEmptyModel()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "";
             //var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1" };
@@ -83,7 +83,7 @@ namespace Shop.Tests
         public void ParseAsync_GetsValidString_RetunsValidModel()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "1,2,1,1,1,1,1,1,1,1";
             var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1" };
@@ -113,7 +113,7 @@ namespace Shop.Tests
         public void ParseAsync_GetsEmptyString_RetunsEmptyModel()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "";
 
@@ -132,7 +132,7 @@ namespace Shop.Tests
         public void ParseBatch_GetsValidString_RetunsValidModelCollection()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "1,2,1,1,1,1,1,1,1,1\n1,2,1,1,1,1,1,1,1,1";
             var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1" };
@@ -165,7 +165,7 @@ namespace Shop.Tests
         public void ParseBatch_GetsEmptyString_SkipsEmptyModel()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "\n1,2,1,1,1,1,1,1,1,1";
             var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1" };
@@ -198,7 +198,7 @@ namespace Shop.Tests
         public void ParseBatchAsync_GetsValidString_RetunsValidModelCollection()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "1,2,1,1,1,1,1,1,1,1\n1,2,1,1,1,1,1,1,1,1";
             var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1" };
@@ -231,7 +231,7 @@ namespace Shop.Tests
         public void ParseBatchAsync_GetsEmptyString_RetunsEmptyModel()
         {
             //arrange
-            var modelParserService = new ModelParserService();
+            var modelParserService = new CsvModelParser();
             modelParserService.SetKeysPositions("Key,ArtikelCode,ColorCode,Description,Price,DiscountPrice,DeliveredIn,Q1,Size,Color".Split(','));
             var inputData = "\n1,2,1,1,1,1,1,1,1,1";
             var expectedDataArticle = new ArticleModel() { ArticleCode = "2", ColorCode = "1", Description = "1", Q1 = "1" };

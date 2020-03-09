@@ -1,6 +1,8 @@
 ﻿using Shop.Domain.Abstraction.Repositories;
 using Shop.Domain.Abstraction.Services;
 using Shop.Domain.Interfaces;
+using Shop.Domain.Models;
+using Shop.Domain.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +15,9 @@ namespace Shop.Domain.Services
     {
         private ICsvToModelParser _parser;
         private IDataRepository[] _repositories;
+        private string[] _keys = null; //columns names
+        private string _tailingData = ""; //used when received data doesn't end with \n
+
 
         public DataService(ICsvToModelParser parser, params IDataRepository[] repositories)
         {
@@ -22,83 +27,82 @@ namespace Shop.Domain.Services
 
         public async Task<string> ProcessDataStreamAsync(StreamReader streamReader)
         {
-            string[] keys = null; //columns names
-            int efCounter = 0, jsonCounter = 0; //Data rows counters
-            var tailingData = ""; //used when received data doesn't end with \n
-
+            int counter = 0; //Data rows counters
+             
             using (streamReader)
             {
-                var value = tailingData + (await streamReader.ReadToEndAsync()).Replace("\r", ""); //read data from body; remove '\r', merge with tailing data
-
+                var value = _tailingData + (await streamReader.ReadToEndAsync()).Replace("\r", ""); //read data from body; remove '\r', merge with tailing data
 
                 if (string.IsNullOrEmpty(value) || string.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase)) //if vaule is empty continue
                 {
-                    return "";
+                    return "Empty value.";
                 }
 
                 var incLastIdx = value.LastIndexOf('\n') + 1; //incremented last index of
                 if (incLastIdx < value.Length)
                 {
-                    tailingData = value.Substring(incLastIdx);
+                    _tailingData = value.Substring(incLastIdx);
                     value = value.Substring(0, value.Length - incLastIdx);
                 }
                 else
-                    tailingData = "";
+                    _tailingData = "";
 
-                if (keys == null) //if columns names haven't been set yet, do it and remove first themfrom value
+                if (_keys == null) //if columns names haven't been set yet, do it and remove first themfrom value
                 {
-                    try
-                    {
-                        keys = value.Split('\n')[0].Split(',');
-                        _parser.SetKeysPositions(keys);
-                        value = value.Substring(value.IndexOf('\n') + 1);
-                    }
-                    catch (Exception e)
-                    {
-                        return e.ToString();
-                    }
+                    value = CutKeysFromData(value);
                 }
 
                 var data = _parser.ParseBatch(value); //use ICsvToModelParser object to convert string data to  models 
                 
                 foreach(var repo in _repositories)
                 {
-                    repo.
+                    counter += await SaveModelDataAsync(repo, data);
                 }
-                if (_efWriter != null)
-                    efCounter += await _efWriter.SaveModelDataAsync(data); //use IDatasourceWriter object to write data to sqlserver
-                if (_jsonWriter != null)
-                    jsonCounter += await _jsonWriter?.SaveModelDataAsync(data); //use IDatasourceWriter object to write data to json file
             }
 
-            return string.Format("Done! Rows inserted EF = {0}, JSON = {1}", efCounter, jsonCounter);
+            return string.Format("Done! Total rows inserted = {0}", counter);
         }
 
-        public int SaveModelData(IEnumerable<ArticleModel> data)
+        public void Reset()
         {
-            return SaveModelDataAsync(data).Result; //Save data synchronously
+            _keys = null;
+            _tailingData = "";
         }
 
-        public async Task<int> SaveModelDataAsync(IEnumerable<ArticleModel> data)
+    private string CutKeysFromData(string value)
         {
-            _repository.BeginTransaction(); //create transaction
+            try
+            {
+                _keys = value.Split('\n')[0].Split(',');
+                _parser.SetKeysPositions(_keys);
+                return value.Substring(value.IndexOf('\n') + 1);
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        private async Task<int> SaveModelDataAsync(IDataRepository repository, IEnumerable<ArticleModel> data)
+        {
+            repository.BeginTransaction(); //create transaction
 
             try
             {
                 foreach (var item in data)
                 {
-                    _repository.WriteData(item);
+                    repository.WriteData(item);
                 }
 
-                _repository.CommitTransaction(); //commit transaction after whole data is written
+                repository.CommitTransaction(); //commit transaction after whole data is written
             }
             catch (Exception e)
             {
-                _repository.RollbackTransaction(); //in case of exception rollback transaction
+                repository.RollbackTransaction(); //in case of exception rollback transaction
                 Console.WriteLine(e);
             }
 
-            return await _repository.SaveChangesAsync(); //finalize transaction
+            return await repository.SaveChangesAsync(); //finalize transaction
         }
     }
 }

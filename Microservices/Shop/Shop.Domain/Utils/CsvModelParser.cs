@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shop.Domain.Services
+namespace Shop.Domain.Utils
 {
-    public class ModelParserService : ICsvToModelParser
+    internal class CsvModelParser : ICsvToModelParser
     {
         public Dictionary<string, int> KeysPositions { get; private set; }
 
-        public ModelParserService() { }
+        public CsvModelParser() { }
 
-        public ModelParserService(string[] keys)
+        public CsvModelParser(string[] keys)
         {
             SetKeysPositions(keys);
         }
