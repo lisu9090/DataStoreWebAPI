@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shop.Domain.Interfaces
+namespace Shop.Domain.Abstraction.Repositories
 {
     public interface IDataRepository: IUnitOfWork // to be implemented outside domain (infrastructure)
     {

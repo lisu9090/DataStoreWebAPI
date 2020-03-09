@@ -1,4 +1,4 @@
-﻿using Shop.Domain.Interfaces;
+﻿using Shop.Domain.Abstraction.Repositories;
 using Shop.Domain.Models;
 using Shop.Infrastructure.DAL;
 using System;
