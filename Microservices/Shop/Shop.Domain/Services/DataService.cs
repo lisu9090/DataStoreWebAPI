@@ -2,6 +2,7 @@
 using Shop.Domain.Abstraction.Services;
 using Shop.Domain.Interfaces;
 using Shop.Domain.Models;
+using System.Linq;
 using Shop.Domain.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,27 @@ namespace Shop.Domain.Services
     public class DataService : IDataService
     {
         private ICsvToModelParser _parser;
-        private IDataRepository[] _repositories;
+        private List<IDataRepository> _repositories;
         private string[] _keys = null; //columns names
         private string _tailingData = ""; //used when received data doesn't end with \n
 
-
-        public DataService(ICsvToModelParser parser, params IDataRepository[] repositories)
+        public DataService(ICsvToModelParser parser, IDataRepository repo)
         {
             _parser = parser;
-            _repositories = repositories;
+            _repositories = new List<IDataRepository> { repo };
         }
+
+        public DataService(ICsvToModelParser parser, IDataRepository repo1, IDataRepository repo2)
+        {
+            _parser = parser;
+            _repositories = new List<IDataRepository> { repo1, repo2 };
+        }
+
+        //public DataService(ICsvToModelParser parser, params IDataRepository[] repositories)
+        //{
+        //    _parser = parser;
+        //    _repositories = repositories;
+        //}
 
         public async Task<string> ProcessDataStreamAsync(StreamReader streamReader)
         {
@@ -38,14 +50,7 @@ namespace Shop.Domain.Services
                     return "Empty value.";
                 }
 
-                var incLastIdx = value.LastIndexOf('\n') + 1; //incremented last index of
-                if (incLastIdx < value.Length)
-                {
-                    _tailingData = value.Substring(incLastIdx);
-                    value = value.Substring(0, value.Length - incLastIdx);
-                }
-                else
-                    _tailingData = "";
+                value = CutTailingData(value);
 
                 if (_keys == null) //if columns names haven't been set yet, do it and remove first themfrom value
                 {
@@ -53,14 +58,11 @@ namespace Shop.Domain.Services
                 }
 
                 var data = _parser.ParseBatch(value); //use ICsvToModelParser object to convert string data to  models 
-                
-                foreach(var repo in _repositories)
-                {
-                    counter += await SaveModelDataAsync(repo, data);
-                }
+
+                counter += SaveInRepos(data);
             }
 
-            return string.Format("Done! Total rows inserted = {0}", counter);
+            return string.Format("Done! Sum of inserted articles: {0}", counter);
         }
 
         public void Reset()
@@ -69,7 +71,21 @@ namespace Shop.Domain.Services
             _tailingData = "";
         }
 
-    private string CutKeysFromData(string value)
+        private string CutTailingData(string value)
+        {
+            var incLastIdx = value.LastIndexOf('\n') + 1; //incremented last index of
+            if (incLastIdx < value.Length)
+            {
+                _tailingData = value.Substring(incLastIdx);
+                value = value.Substring(0, value.Length - incLastIdx);
+            }
+            else
+                _tailingData = "";
+
+            return value;
+        }
+
+        private string CutKeysFromData(string value)
         {
             try
             {
@@ -81,6 +97,11 @@ namespace Shop.Domain.Services
             {
                 return e.ToString();
             }
+        }
+
+        private int SaveInRepos(IEnumerable<ArticleModel> data)
+        {
+            return _repositories.Select(repo => SaveModelDataAsync(repo, data).Result).Aggregate((sum, next) => sum + next);
         }
 
         private async Task<int> SaveModelDataAsync(IDataRepository repository, IEnumerable<ArticleModel> data)

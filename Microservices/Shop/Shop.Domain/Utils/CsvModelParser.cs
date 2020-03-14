@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Utils
 {
-    internal class CsvModelParser : ICsvToModelParser
+    public class CsvModelParser : ICsvToModelParser
     {
         public Dictionary<string, int> KeysPositions { get; private set; }
 

@@ -13,15 +13,15 @@ namespace Shop.Infrastructure.Repositiories
     {
         private ShopEFContext _dbContext;
 
-        public EFRepository()
-        {
-            _dbContext = new ShopEFContext();
-        }
+        //public EFRepository()
+        //{
+        //    _dbContext = new ShopEFContext();
+        //}
 
-        public EFRepository(DbContextOptions<ShopEFContext> options)
-        {
-            _dbContext = new ShopEFContext(options);
-        }
+        //public EFRepository(DbContextOptions<ShopEFContext> options)
+        //{
+        //    _dbContext = new ShopEFContext(options);
+        //}
 
         public EFRepository(ShopEFContext context)
         {

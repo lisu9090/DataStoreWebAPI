@@ -11,7 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Shop.Domain.Abstraction.Repositories;
+using Shop.Domain.Abstraction.Services;
+using Shop.Domain.Interfaces;
+using Shop.Domain.Services;
+using Shop.Domain.Utils;
 using Shop.Infrastructure.DAL;
+using Shop.Infrastructure.Repositiories;
 
 namespace Shop.API
 {
@@ -28,7 +34,10 @@ namespace Shop.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ShopEFContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddTransient<IDataService, DataService>();
+            services.AddTransient<ICsvToModelParser, CsvModelParser>();
+            services.AddTransient<IDataRepository, EFRepository>();
+            services.AddTransient<IDataRepository, JsonRepository>();
             services.AddControllers();
         }
 
